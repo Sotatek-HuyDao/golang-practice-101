@@ -10,5 +10,7 @@ func NewCmd() *cobra.Command {
 	}
 	versionCmd := NewVersionCmd()
 	rootCmd.AddCommand(versionCmd)
+	lineCountCmd := NewLineCountCmd()
+	rootCmd.AddCommand(lineCountCmd)
 	return rootCmd
 }

@@ -6,10 +6,10 @@ import (
 )
 
 func NewVersionCmd() *cobra.Command {
-	verController := version.NewController()
+	verionCtr := version.NewController()
 	return &cobra.Command{
 		Use:   "version",
 		Short: "Show the version info",
-		Run:   verController.Version,
+		Run:   verionCtr.Version,
 	}
 }
