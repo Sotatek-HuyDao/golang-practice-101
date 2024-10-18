@@ -12,5 +12,7 @@ func NewCmd() *cobra.Command {
 	rootCmd.AddCommand(versionCmd)
 	lineCountCmd := NewLineCountCmd()
 	rootCmd.AddCommand(lineCountCmd)
+	checksumCmd := NewChecksumCmd()
+	rootCmd.AddCommand(checksumCmd)
 	return rootCmd
 }
