@@ -27,32 +27,25 @@ func NewService() *ServiceImpl {
 }
 
 func (s *ServiceImpl) LineCount(filePath string) (int, error) {
-	file, err := os.Open(filePath)
-	if err != nil {
-
-		return 0, fmt.Errorf("No such file '%s'", filePath)
+	reader := os.Stdin
+	if filePath != "-" {
+		file, err := utils.OpenFile(filePath)
+		if err != nil {
+			return 0, err
+		}
+		defer utils.CloseFile(file)
+		if isBinary(file) {
+			return 0, fmt.Errorf("Cannot do linecount for binary file '%s'\n", filePath)
+		}
+		file.Seek(0, io.SeekStart)
+		reader = file
 	}
-	defer file.Close()
-
-	fileInfo, err := file.Stat()
-	if err != nil {
-		return 0, err
-	}
-	if fileInfo.IsDir() {
-		return 0, fmt.Errorf("Expected file got directory '%s'", filePath)
-	}
-
-	if isBinary(file) {
-		return 0, fmt.Errorf("Cannot do linecount for binary file '%s'\n", filePath)
-
-	}
-	file.Seek(0, io.SeekStart)
 
 	buf := make([]byte, 32*1024)
 	count := 0
 	lineSep := []byte{'\n'}
 	for {
-		c, err := file.Read(buf)
+		c, err := reader.Read(buf)
 		count += bytes.Count(buf[:c], lineSep)
 
 		switch {

@@ -6,7 +6,6 @@ import (
 	"crypto/sha256"
 	"fmt"
 	"io"
-	"os"
 
 	"github.com/Sotatek-HuyDao/golang-practice-101/utils"
 	"github.com/sirupsen/logrus"
@@ -53,21 +52,11 @@ func (s *ServiceImpl) SHA256Checksum(filePath string) (string, error) {
 	return fmt.Sprintf("%x", sha256.Sum256(data)), nil
 }
 
-func readFile(filename string) ([]byte, error) {
-	file, err := os.Open(filename)
-	if err != nil {
-		return nil, fmt.Errorf("No such file '%s'", filename)
-	}
-	defer file.Close()
-
-	fileInfo, err := file.Stat()
+func readFile(filePath string) ([]byte, error) {
+	file, err := utils.OpenFile(filePath)
 	if err != nil {
 		return nil, err
 	}
-
-	if fileInfo.IsDir() {
-		return nil, fmt.Errorf("Expected file got directory '%s'", filename)
-	}
-
+	defer utils.CloseFile(file)
 	return io.ReadAll(file)
 }
