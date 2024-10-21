@@ -1,0 +1,49 @@
+name: Unittest
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  lint:
+    name: Go Lint
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: 1.22
+
+      - name: Check gofmt
+        run: |
+          output=$(gofmt -l .)
+          if [[ -n "$output" ]]; then
+            echo "Code formatting issues found:"
+            echo "$output"
+            exit 1
+          else
+            echo "No formatting issues found."
+          fi
+
+      - name: Run go vet
+        run: go vet ./...
+  unittest:
+    name: Unittest
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: 1.22
+
+      - name: Run go test
+        run: go test ./... -count=1 -cover -race -v
