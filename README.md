@@ -52,6 +52,10 @@ The application is built using the Cobra library for creating powerful modern CL
    // or using go run command
    go run ./cmd/app/main.go [command] [flags]
    ```
+6. Run testcases:
+   ```
+   make run-test
+   ```
 
 ### Note
 1. Use `futil` command instead of `./futil`: Copy futil file to system's $PATH. Example in Linux
