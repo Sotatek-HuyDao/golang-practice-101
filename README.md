@@ -1,5 +1,5 @@
 # futil - File Utility
-- This commit is for testing purposes
+
 `futil` is a simple command-line utility written in Go for performing various file operations such as counting lines and calculating checksums.
 
 ## Features

@@ -14,5 +14,6 @@ func NewCmd() *cobra.Command {
 	rootCmd.AddCommand(lineCountCmd)
 	checksumCmd := NewChecksumCmd()
 	rootCmd.AddCommand(checksumCmd)
+	rootCmd.CompletionOptions.HiddenDefaultCmd = true
 	return rootCmd
 }
