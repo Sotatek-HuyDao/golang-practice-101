@@ -1,0 +1,45 @@
+name: Build and Publish to Pinata
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  build:
+    name: Build and Publish
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: 1.22
+
+      - name: Build
+        run: make run-build VERSION=${{ github.ref_name }}
+
+      - name: Install jq
+        run: sudo apt-get install jq
+
+      - name: Upload to Pinata
+        run: |
+          echo "Uploading to Pinata..."
+          response=$(curl -X POST https://api.pinata.cloud/pinning/pinFileToIPFS \
+            -H "pinata_api_key: ${{ secrets.PINATA_API_KEY }}" \
+            -H "pinata_secret_api_key: ${{ secrets.PINATA_SECRET_API_KEY }}" \
+            -F file=@./futil \
+            -F "pinataMetadata={\"name\": \"futil\"}"\
+            -F "pinataOptions={\"cidVersion\": 1}")
+
+          echo "Response: $response"
+
+          ipfs_hash=$(echo "$response" | jq -r '.IpfsHash')   
+          if [[ "$ipfs_hash" == "null" ]]; then
+              error_message=$(echo "$response" | jq -r '.message')
+              echo "Error uploading to Pinata: $error_message"
+              exit 1
+          fi
+          echo "New version: https://aqua-tropical-skink-958.mypinata.cloud/ipfs/$ipfs_hash"

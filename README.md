@@ -61,7 +61,10 @@ The application is built using the Cobra library for creating powerful modern CL
 2. Default version is `0.0.1`, you can change version when build the application using below command:
    ```
    make run-build VERSION={your version}
-   ```
+
+### CICD
+1. Lint and unit tests run automatically after code is pushed to master.
+2. After releasing a new version, the new file will be pushed to Pinata IPFS and logged in GitHub Actions.
 
 ## Usage Examples
 
