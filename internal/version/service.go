@@ -3,10 +3,11 @@ package version
 import (
 	"fmt"
 
-	config "github.com/Sotatek-HuyDao/golang-practice-101/internal/configs"
 	"github.com/Sotatek-HuyDao/golang-practice-101/utils"
 	"github.com/sirupsen/logrus"
 )
+
+var version = "0.0.1"
 
 type Service interface {
 	Version() (string, error)
@@ -18,9 +19,8 @@ type ServiceImpl struct {
 }
 
 func NewService() *ServiceImpl {
-	cfg := config.MustParseConfig()
 	svc := &ServiceImpl{
-		version: cfg.Version,
+		version: version,
 		logger:  utils.Logger(),
 	}
 	return svc
